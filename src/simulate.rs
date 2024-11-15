@@ -1,4 +1,3 @@
-use itertools::Itertools;
 use crate::card::{
     Card,
     generate_deck,
@@ -25,7 +24,7 @@ pub fn simulate_no_p2(p1: Vec<Card>, table: Vec<Card>, n: u32) -> (u32, u32) {
     let mut wins_1: u32 = 0;
     let mut wins_2: u32 = 0;
     
-    for iteration in 0..n {
+    for _ in 0..n {
         // generate initial deck
         let mut deck = generate_deck();
         shuffle_deck(&mut deck);

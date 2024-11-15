@@ -8,8 +8,8 @@ use crate::simulate::simulate_no_p2;
 
 fn main() {
     let hand = vec![
-        Card::new("2".to_string(), "h".to_string()),
-        Card::new("7".to_string(), "d".to_string()),
+        Card::new("A".to_string(), "h".to_string()),
+        Card::new("A".to_string(), "d".to_string()),
     ];
 
     // Community cards
