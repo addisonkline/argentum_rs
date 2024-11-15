@@ -1,3 +1,7 @@
+use rand::seq::SliceRandom;
+use rand::thread_rng;
+
+#[derive(PartialEq, Clone, Debug)]
 pub struct Card {
     pub value: String,
     pub suit: String,
@@ -36,3 +40,24 @@ impl Card {
     }
 }
 
+/// Generate a deck of 52 cards
+pub fn generate_deck() -> Vec<Card> {
+    let values: Vec<&str> = vec!["2","3","4","5","6","7","8","9","T","J","Q","K","A"];
+    let suits: Vec<&str> = vec!["s","h","c","d"];
+
+    let mut deck: Vec<Card> = vec![];
+
+    for value in &values {
+        for suit in &suits {
+            let this_card = Card::new(value.to_string(), suit.to_string());
+            deck.push(this_card);
+        }
+    }
+    return deck;
+}
+
+/// Shuffle deck
+pub fn shuffle_deck(deck: &mut Vec<Card>) {
+    let mut rng = thread_rng();
+    deck.shuffle(&mut rng);
+}
