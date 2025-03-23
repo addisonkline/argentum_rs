@@ -1,31 +1,45 @@
 mod card;
 mod ranker;
 mod simulate;
+mod argparser;
 
+// external imports
+use clap::Parser;
+// internal imports
 use crate::card::Card;
-use crate::ranker::score_hand;
+use crate::simulate::simulate_both;
 use crate::simulate::simulate_no_p2;
+use crate::simulate::simulate_no_board;
+use crate::simulate::simulate_neither;
+use crate::argparser::ArgType;
+use crate::argparser::Args;
+use crate::argparser::convert_args_to_tuple;
 
 fn main() {
-    let hand = vec![
-        Card::new("A".to_string(), "h".to_string()),
-        Card::new("A".to_string(), "d".to_string()),
-    ];
+    // get user input from CLI
+    let args = Args::parse();
+    // get proper input values from args
+    let (arg, h1, h2, table, n) = convert_args_to_tuple(&args);
 
-    // Community cards
-    let table = vec![
-        Card::new("9".to_string(), "c".to_string()),
-        Card::new("J".to_string(), "s".to_string()),
-        Card::new("4".to_string(), "h".to_string()),
-        Card::new("K".to_string(), "h".to_string()),
-        Card::new("6".to_string(), "d".to_string()),
-    ];
-
-    let result = score_hand(hand.clone(), table.clone());
-    println!("Hand score for p1: {}", result);
-
-    let (w1, w2) = simulate_no_p2(hand.clone(), table.clone(), 10000);
-    println!("Player 1 wins {} times out of 10000", w1);
-    println!("Player 2 wins {} times out of 10000", w2);
-    println!("There was a tie {} times out of 10000", 10000 as u32 - w1 - w2);
+    // simulation time
+    println!("[Ag] running {} simulations...", n);
+    let w1: u32;
+    let w2: u32;
+    match arg {
+        ArgType::SimulateBoth => { // if both p2 and table are known, no simulations are necessary
+            (w1, w2) = simulate_both(h1.clone(), h2.clone(), table.clone(), n);
+        },
+        ArgType::SimulateNoBoard => {
+            (w1, w2) = simulate_no_board(h1.clone(), h2.clone(), n);
+        },
+        ArgType::SimulateNoP2 => {
+            (w1, w2) = simulate_no_p2(h1.clone(), table.clone(), n);
+        },
+        ArgType::SimulateNeither => {
+            (w1, w2) = simulate_neither(h1.clone(), n);
+        }
+    }
+    println!("[Ag] Player 1 wins {} times out of {}", w1, n);
+    println!("[Ag] Player 2 wins {} times out of {}", w2, n);
+    println!("[Ag] There was a tie {} times out of {}", n - w1 - w2, n);
 }

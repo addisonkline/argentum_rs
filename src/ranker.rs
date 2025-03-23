@@ -167,6 +167,14 @@ pub fn score_hand(hand: Vec<Card>, table: Vec<Card>) -> f64 {
         // part 2: calculate the second part of the score based on cards in descending order
         score += ((option_new[0].value_numeric as f64 / 100_f64) + (option_new[1].value_numeric as f64 / 100_f64.powf(2.0)) + (option_new[2].value_numeric as f64  / 100_f64.powf(3.0)) + (option_new[3].value_numeric as f64 / 100_f64.powf(4.0)) + (option_new[4].value_numeric as f64 / 100_f64.powf(5.0))) as f64;
 
+        // finally, we have to manually re-calculate scores for 5-high straights
+        if score == 4.1405040302 {
+            score = 4.0504030201;
+        }
+        else if score == 8.1405040302 {
+            score = 8.0504030201;
+        }
+
         scores.push(score);
     }
 
